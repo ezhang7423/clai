@@ -8,6 +8,7 @@ def main() -> None:
     parser = ArgumentParser("CLAI- your own command line AI!")
     parser.add_argument("prompt", type=str, nargs="+")
     parser.add_argument("-m", "--model", default="gpt-3.5-turbo")
+    parser.add_argument("-c", "--no-clipboard", type=bool, default=False)
     args = parser.parse_args()
 
     openai = initialize_api()
@@ -15,7 +16,7 @@ def main() -> None:
     prompt = " ".join(args.prompt)
     response = openai.ChatCompletion.create(
         model=args.model,
-        messages=create_message_context(prompt),
+        messages=create_message_context(prompt, args),
     )
 
     best_response = response["choices"][0]["message"]["content"]

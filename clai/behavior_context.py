@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Literal, Union
 
 from clai.ocr_drivers import WindowContext
+from clai.ocr_drivers.base_driver import ClipboardContext
 
 USER_PROMPT_FORMAT = """
 User Prompt:
@@ -24,6 +25,19 @@ Active Window OCR Extracted Text (RAW):
 Please answer "User Prompt" using the raw OCR text as context to the message.
 """
 
+CLIPBOARD_EXTRACTION_FORMAT = """
+Clipboard Text:
+```
+{clipboard_text}
+```
+Clipboard Text End:
+
+
+{user_prompt}
+
+Please answer "User Prompt" using the clipboard text as context to the message.
+"""
+
 
 @dataclass
 class Prompt:
@@ -38,12 +52,19 @@ class Prompt:
         """
         """."""
         user_prompt = USER_PROMPT_FORMAT.format(user_prompt=self.prompt.strip())
-        if self.context.clean_screen_text and self.context.active_window_name:
-            return OCR_EXTRACTION_FORMAT.format(
-                active_window_title=self.context.active_window_name.strip(),
-                ocr_text=self.context.clean_screen_text.strip(),
-                user_prompt=user_prompt.strip(),
-            )
+        if self.context:
+            if isinstance(self.context, WindowContext) and self.context.clean_screen_text and self.context.active_window_name:
+                return OCR_EXTRACTION_FORMAT.format(
+                    active_window_title=self.context.active_window_name.strip(),
+                    ocr_text=self.context.clean_screen_text.strip(),
+                    user_prompt=user_prompt.strip(),
+                )
+            elif isinstance(self.context, ClipboardContext):
+                return OCR_EXTRACTION_FORMAT(
+                    clipboard_text=self.context.text.strip(),
+                    user_prompt=user_prompt.strip(),
+                )
+                
         return user_prompt.strip()
 
 
@@ -89,73 +110,9 @@ When asked to write a command, code, formulas, or any one-line response task:
 You will receive OCR context and window title names, for some prompts. They are very
 noisy, use best-effort when reading them.
 """
-_EXAMPLE_EMAIL = """
-Dear <Recipient's Name>,
-
-I hope this email finds you well. I am writing to request a meeting with you on <Date and Time>, and I would appreciate it if you could confirm your availability at your earliest convenience.
-
-The purpose of this meeting is to discuss <Purpose of the Meeting> with you. Specifically, I would like to <Agenda Item 1>, <Agenda Item 2>, and <Agenda Item 3>. The meeting will last approximately <Meeting Duration> and will take place at <Meeting Location>.
-
-Please let me know if this date and time work for you. If not, please suggest an alternative time that is convenient for you. Additionally, if there are any documents or information you would like me to review before the meeting, please let me know, and I will make sure to review them.
-
-I look forward to hearing from you soon.
-
-Best regards,
-
-<Your Name>
-"""  # noqa: E501
-_EXAMPLE_REGEX = '=IFERROR(REGEXEXTRACT(<INPUT CELL HERE>, "[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,4}");"")'  # noqa
-_EXAMPLE_PYTHON = """
-def fibonacci(n: int) -> Generator[int, None, None]:
-    a, b = 0, 1
-    for _ in range(n):
-        yield a
-        a, b = b, a + b
-"""
-_EXAMPLE_GOOGLE_SHEETS = '=IFERROR(REGEXEXTRACT(<INPUT CELL HERE>, "[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,4}");"")'  # noqa
-_EXAMPLE_BASH_COMMAND = "grep -rnw . -e 'bruh'"
 
 MESSAGE_CONTEXT: list[Message] = [
-    Message(role="system", content=_DEFAULT_ASSISTANT_ROLE),
-    Message(
-        role="user",
-        content=Prompt(
-            WindowContext(),
-            prompt="commandline search for files with the name 'bruh' in them",
-        ),
-    ),
-    Message(role="assistant", content=_EXAMPLE_BASH_COMMAND),
-    Message(
-        role="user",
-        content=Prompt(
-            context=WindowContext(), prompt="email set up a meeting next week"
-        ),
-    ),
-    Message(role="assistant", content=_EXAMPLE_EMAIL),
-    Message(
-        role="user",
-        content=Prompt(
-            context=WindowContext(),
-            prompt="google sheets formula extracts an email from string of text",
-        ),
-    ),
-    Message(role="assistant", content=_EXAMPLE_GOOGLE_SHEETS),
-    Message(
-        role="user",
-        content=Prompt(
-            context=WindowContext(),
-            prompt="google sheets formula extracts an email from string of text",
-        ),
-    ),
-    Message(role="assistant", content=_EXAMPLE_REGEX),
-    Message(
-        role="user",
-        content=Prompt(
-            context=WindowContext(),
-            prompt="python fibonacci function in form of a generator",
-        ),
-    ),
-    Message(role="assistant", content=_EXAMPLE_PYTHON),
+    Message(role="system", content=_DEFAULT_ASSISTANT_ROLE),    
 ]
 
 __all__ = ["MESSAGE_CONTEXT", "Message", "Prompt"]

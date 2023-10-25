@@ -12,6 +12,7 @@ openai = "^0.27.0"
 pytesseract = "^0.3.10"
 PyAutoGUI = "^0.9.53"
 PyWinCtl = "^0.0.43"
+clipboard = "^0.0.4"
 
 [tool.poetry.dev-dependencies]
 darglint = "^1.8.1"

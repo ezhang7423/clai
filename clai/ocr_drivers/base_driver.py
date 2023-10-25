@@ -30,6 +30,12 @@ class WindowContext:
         return clean_text
 
 
+@dataclass
+class ClipboardContext:
+    text: Optional[str] = None
+    """If the driver supports it, the text extracted from the active window will be
+    filled here."""
+
 class BaseOCRDriver(ABC):
     """This base class can be used to standardize the interface for future OS's"""
 
