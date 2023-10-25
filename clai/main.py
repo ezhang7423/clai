@@ -8,7 +8,7 @@ def main() -> None:
     parser = ArgumentParser("CLAI- your own command line AI!")
     parser.add_argument("prompt", type=str, nargs="+")
     parser.add_argument("-m", "--model", default="gpt-3.5-turbo")
-    parser.add_argument("-c", "--no-clipboard", type=bool, default=False)
+    parser.add_argument("-c", "--no-clipboard", action="store_true")
     args = parser.parse_args()
 
     openai = initialize_api()

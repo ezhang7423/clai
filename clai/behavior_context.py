@@ -59,8 +59,8 @@ class Prompt:
                     ocr_text=self.context.clean_screen_text.strip(),
                     user_prompt=user_prompt.strip(),
                 )
-            elif isinstance(self.context, ClipboardContext):
-                return OCR_EXTRACTION_FORMAT(
+            elif isinstance(self.context, ClipboardContext) and self.context.text:
+                return CLIPBOARD_EXTRACTION_FORMAT.format(
                     clipboard_text=self.context.text.strip(),
                     user_prompt=user_prompt.strip(),
                 )
