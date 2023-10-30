@@ -4,7 +4,7 @@ description = "Command Line AI- this tool lets you call ChatGPT from a CLI"
 license = "Proprietary"
 name = "ezclai"
 readme = "README.md"
-version = "0.3.0"
+version = "0.3.1"
 
 [tool.poetry.dependencies]
 PyAutoGUI = "^0.9.53"
