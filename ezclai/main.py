@@ -5,7 +5,7 @@ from .message_creation import create_message_context
 
 
 def main() -> None:
-    parser = ArgumentParser("CLAI- your own command line AI!")
+    parser = ArgumentParser("ezclai- your own command line AI!")
     parser.add_argument("prompt", type=str, nargs="+")
     parser.add_argument("-m", "--model", default="gpt-3.5-turbo")
     parser.add_argument("-c", "--no-clipboard", action="store_true")

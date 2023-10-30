@@ -1,5 +1,5 @@
 #!/bin/bash
 set -euxo pipefail
 
-poetry run isort clai/ tests/
-poetry run black clai/ tests/
+poetry run isort ezclai/ tests/
+poetry run black ezclai/ tests/

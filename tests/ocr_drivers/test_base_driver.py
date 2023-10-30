@@ -1,5 +1,5 @@
 # flake8: noqa
-from clai.ocr_drivers import WindowContext
+from ezclai.ocr_drivers import WindowContext
 
 _RAW_OCR_EXAMPLE = """
 test

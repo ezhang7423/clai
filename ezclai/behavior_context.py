@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import Literal, Union
 
-from clai.ocr_drivers import WindowContext
-from clai.ocr_drivers.base_driver import ClipboardContext
+from ezclai.ocr_drivers import WindowContext
+from ezclai.ocr_drivers.base_driver import ClipboardContext
 
 USER_PROMPT_FORMAT = """
 User Prompt:

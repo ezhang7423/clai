@@ -1,5 +1,5 @@
-from clai.behavior_context import MESSAGE_CONTEXT, Message, Prompt
-from clai.ocr_drivers import WindowContext
+from ezclai.behavior_context import MESSAGE_CONTEXT, Message, Prompt
+from ezclai.ocr_drivers import WindowContext
 
 from .ocr_drivers.test_base_driver import _CLEAN_OCR_EXAMPLE, _RAW_OCR_EXAMPLE
 

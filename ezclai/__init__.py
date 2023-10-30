@@ -1,4 +1,4 @@
-"""**clai**
+"""**ezclai**
 
 Command Line AI- this tool lets you call ChatGPT from a CLI
 """
